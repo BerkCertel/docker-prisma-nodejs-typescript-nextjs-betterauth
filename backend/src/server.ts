@@ -3,6 +3,7 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors"; // Frontend ile backend arasındaki iletişimi sağlamak için
 import { Pool } from "pg"; // PostgreSQL'e bağlanmak için
+import { PrismaClient } from "@prisma/client";
 import categoryRouter from "./routes/categoryRoute";
 import healthcheckRouter from "./routes/healthcheckRoute";
 
@@ -22,6 +23,8 @@ if (!POSTGRES_USER || !POSTGRES_PASSWORD || !POSTGRES_DB || !POSTGRES_HOST) {
 }
 // Yeni bir Express uygulaması oluşturuyoruz
 const app: Express = express();
+
+const prisma = new PrismaClient();
 
 // Gelen isteklerin JSON formatında olmasını sağlıyoruz
 app.use(express.json());
@@ -49,8 +52,6 @@ app.get("/api/ping", (req: Request, res: Response) => {
   });
 });
 
-// app.use("/api", categoryRoutes);
-
 // Sunucuyu dinlemeye" başlıyoruz
 app.listen(PORT, () => {
   console.log(
@@ -66,3 +67,15 @@ app.listen(PORT, () => {
     }
   });
 });
+
+async function start() {
+  try {
+    await prisma.$connect();
+    console.log("✅ Prisma veritabanına başarıyla bağlandı!");
+  } catch (error) {
+    console.error("🔴 Prisma veritabanına bağlanamadı:", error);
+    process.exit(1);
+  }
+}
+
+start();

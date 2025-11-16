@@ -1,11 +1,8 @@
 import { Router } from "express";
+import { healthcheck } from "../controllers/healthcheckController";
 
 const healthcheckRouter = Router();
 
-healthcheckRouter.get("/ping", (req, res) => {
-  res.status(200).json({
-    message: "Pong! Sunucu çalışıyor. 🏓",
-  });
-});
+healthcheckRouter.get("/", healthcheck);
 
 export default healthcheckRouter;

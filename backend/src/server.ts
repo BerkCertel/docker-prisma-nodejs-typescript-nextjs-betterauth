@@ -3,7 +3,8 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors"; // Frontend ile backend arasındaki iletişimi sağlamak için
 import { Pool } from "pg"; // PostgreSQL'e bağlanmak için
-import categoryRouter from "./routes//categoryRoute";
+import categoryRouter from "./routes/categoryRoute";
+import healthcheckRouter from "./routes/healthcheckRoute";
 
 // .env dosyasındaki değişkenleri projemize yüklüyoruz
 dotenv.config();
@@ -38,6 +39,7 @@ const pool = new Pool({
 });
 
 app.use("/api/category", categoryRouter);
+app.use("/api/healthcheck", healthcheckRouter);
 
 // 1. Basit bir sağlık kontrolü rotası
 // Bu, sunucunun ayakta olup olmadığını kontrol etmek için kullanılır.
